@@ -7,6 +7,9 @@ from indexed_zstd import IndexedZstdFile
 import time 
 import logging
 import psutil
+import sys
+import requests
+import tqdm
 
 process = psutil.Process()
 faiss.omp_set_num_threads(1)
@@ -92,6 +95,32 @@ class DiskVectorIndex:
         
         url = f"https://huggingface.co/datasets/{self.remote_path}/resolve/main/{filename}"
         os.makedirs(os.path.dirname(local_filepath), exist_ok=True)
-        cmd = f"wget -O {local_filepath} {url}"
-        logging.info(f"Downloading file with command: {cmd}")
-        os.system(cmd)
+        print(f"Downloading file: {url}")
+        self.http_get(url, local_filepath)
+
+
+    def http_get(self, url, path):
+        """
+        Downloads a URL to a given path on disc
+        """
+        if os.path.dirname(path) != '':
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+
+        req = requests.get(url, stream=True)
+        if req.status_code != 200:
+            print("Exception when trying to download {}. Response {}".format(url, req.status_code), file=sys.stderr)
+            req.raise_for_status()
+            return
+
+        download_filepath = path+"_part"
+        with open(download_filepath, "wb") as file_binary:
+            content_length = req.headers.get('Content-Length')
+            total = int(content_length) if content_length is not None else None
+            progress = tqdm.tqdm(unit="B", total=total, unit_scale=True)
+            for chunk in req.iter_content(chunk_size=1024):
+                if chunk: # filter out keep-alive new chunks
+                    progress.update(len(chunk))
+                    file_binary.write(chunk)
+
+        os.rename(download_filepath, path)
+        progress.close()

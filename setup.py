@@ -5,7 +5,7 @@ with open("README.md", mode="r", encoding="utf-8") as readme_file:
 
 setup(
     name="DiskVectorIndex",
-    version="0.0.1",
+    version="0.0.2",
     author="Nils Reimers",
     author_email="nils@cohere.com",
     description="Efficient vector DB on large datasets from disk, using minimal memory.",

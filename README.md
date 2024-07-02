@@ -28,9 +28,6 @@ Get your free **Cohere API key** from [cohere.com](https://cohere.com). You must
 export COHERE_API_KEY=your_api_key
 ```
 
-
-Make sure you have `wget` installed, to be able to download files on-the-fly from the HuggingFace hub.
-
 Install the package:
 ```
 pip install DiskVectorIndex
