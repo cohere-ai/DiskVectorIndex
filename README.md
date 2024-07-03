@@ -55,8 +55,61 @@ from DiskVectorIndex import DiskVectorIndex
 index = DiskVectorIndex("path/to/index")
 ```
 
+# End2End RAG Example
 
-# How does it work?
+We can use the excellent RAG capabilities of the [Cohere Command R+](https://docs.cohere.com/docs/retrieval-augmented-generation-rag) model to build an end2end RAG pipeline:
+
+```python
+import cohere
+from DiskVectorIndex import DiskVectorIndex
+import os 
+import sys 
+
+co = cohere.Client(api_key=os.environ["COHERE_API_KEY"])
+index = DiskVectorIndex("Cohere/trec-rag-2024-index")
+
+question = "Which popular deep learning frameworks were developed by Facebook and Google? What are their differences?"
+prompt = f"Answer the following question with a detailed answer: {question}"
+
+
+print("Question:", question)
+
+# Step 1 - Decompose the question into sub-questions
+res = co.chat(
+  model="command-r-plus",
+  message=prompt,
+  search_queries_only=True
+)
+
+sub_queries = [r.text for r in res.search_queries]
+print("Generated sub queries:", sub_queries)
+
+# Step 2 - Search for relevant documents for each sub 
+print("Start searching")
+docs = []
+doc_id = 1
+for query in sub_queries:
+    hits = index.search(query, top_k=3)
+    for hit in hits:
+        docs.append({"id": str(doc_id), 'title': hit['doc']['title'], 'snippet': hit['doc']['segment']})
+        doc_id += 1
+
+print(f"Documents found: {len(docs)}")
+
+# Step 3 - Generate the response
+print("Start generating response")
+print("==============")
+
+for event in co.chat_stream(model="command-r-plus", message=prompt, documents=docs, citation_quality="fast"):
+    if event.event_type == "text-generation":
+        #Print a text chunk
+        print(event.text, end="")
+    elif event.event_type == "citation-generation":
+        #Print the citations as inline citations
+        print("["+", ".join(event.citations[0].document_ids)+"]", end="")
+```
+
+# How does the DiskVectorIndex work?
 The Cohere embeddings have been optimized to work well in compressed vector space, as detailed in our [Cohere int8 & binary Embeddings blog post](https://cohere.com/blog/int8-binary-embeddings). The embeddings have not only been trained to work in float32, which requires a lot of memory, but to also operate well with int8, binary and Product Quantization (PQ) compression.
 
 The above indices uses Product Quantization (PQ) to go from originally 1024*4=4096 bytes per embedding to just 128 bytes per embedding, reducing your memory requirement 32x.
