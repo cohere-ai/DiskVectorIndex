@@ -13,10 +13,10 @@ Below you find different pre-build indices. The embeddings are downloaded at the
 | Name | Description | #Docs | Index Size (GB) | Memory Needed |
 | --- | --- | :---: | :---: | :---: | 
 |  [Cohere/trec-rag-2024-index](https://huggingface.co/datasets/Cohere/trec-rag-2024-index) | Segmented corpus for [TREC RAG 2024](https://trec-rag.github.io/annoucements/2024-corpus-finalization/) | 113,520,750 | 15GB | 380MB |
-| fineweb-edu-10B-index (soon)  | 10B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 9,267,429 | 1.4GB | 230MB |
-| fineweb-edu-100B-index (soon)  | 100B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 69,672,066 | 9.2GB | 380MB
-| fineweb-edu-350B-index (soon)  | 350B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 160,198,578 | 21GB | 380MB
-| fineweb-edu-index (soon) | Full 1.3T token dataset [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 324,322,256 | 42GB | 285MB
+| [Cohere/fineweb-edu-10B-index](https://huggingface.co/datasets/Cohere/fineweb-edu-10B-index)  | 10B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 9,267,429 | 1.4GB | 230MB |
+| [Cohere/fineweb-edu-100B-index](https://huggingface.co/datasets/Cohere/fineweb-edu-100B-index)  | 100B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 69,672,066 | 9.2GB | 380MB
+| [Cohere/fineweb-edu-350B-index](https://huggingface.co/datasets/Cohere/fineweb-edu-350B-index)  | 350B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 160,198,578 | 21GB | 380MB
+| [Cohere/fineweb-edu-index](https://huggingface.co/datasets/Cohere/fineweb-edu-index) | Full 1.3T token dataset [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 324,322,256 | 42GB | 285MB
 
 
 Each index comes with the respective corpus, that is chunked into smaller parts. These chunks are downloaded on-demand and reused for further queries.
